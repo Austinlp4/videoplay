@@ -64,6 +64,7 @@
                         videosContainer.appendChild(htmlElement);
                     },
                     onRoomFound: function(room) {
+                        console.log('room', room)
                         var alreadyExist = document.querySelector('button[data-broadcaster="' + room.broadcaster + '"]');
                         if (alreadyExist) return;
                         if (typeof roomsList === 'undefined') roomsList = document.body;
