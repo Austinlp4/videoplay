@@ -59,7 +59,25 @@
                             });
                         };
                         socket.on('message', config.onmessage);
-                    }    
+                    },
+                    onRemoteStream: function(htmlElement) {
+                        videosContainer.appendChild(htmlElement);
+                    },
+                    onRoomFound: function(room) {
+                      let roomToken = room.broadcaster,
+                          broadcaster = room.broadcaster;
+
+                      this.broadcastUI.joinRoom({
+                        roomToken: roomToken,
+                        joinUser: broadcaster
+                      })
+                    },
+                    onNewParticipant: function(numberOfViewers) {
+                        document.title = 'Viewers: ' + numberOfViewers;
+                    },
+                    onReady: function() {
+                        console.log('now you can open or join rooms');
+                    }
                 };
                 
             </script>
