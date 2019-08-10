@@ -1,4 +1,4 @@
-var broadcast = function(config) {
+export var broadcast = function(config) {
     var self = {
         userToken: uniqueToken()
     },
