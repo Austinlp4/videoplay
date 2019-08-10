@@ -31,27 +31,27 @@ class App extends React.Component {
     })
   }
 
-  onRemoteStream = (element) => {
-    this.videocontainer.appendChild(element);
-  }
+  // onRemoteStream = (element) => {
+  //   this.videocontainer.appendChild(element);
+  // }
 
-  onRoomFound = (room) => {
-    let roomToken = room.broadcaster,
-        broadcaster = room.broadcaster;
+  // onRoomFound = (room) => {
+  //   let roomToken = room.broadcaster,
+  //       broadcaster = room.broadcaster;
 
-    this.broadcastUI.joinRoom({
-      roomToken: roomToken,
-      joinUser: broadcaster
-    })
-  }
+  //   this.broadcastUI.joinRoom({
+  //     roomToken: roomToken,
+  //     joinUser: broadcaster
+  //   })
+  // }
 
-  onNewParticipant = (numberOfViewers) => {
+  // onNewParticipant = (numberOfViewers) => {
 
-  }
+  // }
 
-  onReady = () => {
-    alert('now you can open or join rooms')
-  }
+  // onReady = () => {
+  //   alert('now you can open or join rooms')
+  // }
 
   setupNewBroadcastButtonClickHandler = () => {
     this.DetectRTC.load(() => {
@@ -135,7 +135,6 @@ class App extends React.Component {
             this.config.attachStream = stream;
             
             // this.videosContainer.appendChild(htmlElement);
-            console.log(this.config.attachStream)
             callback && callback();
         },
         onerror: function() {
