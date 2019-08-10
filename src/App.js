@@ -1,6 +1,5 @@
 import React from 'react';
 import './App.css';
-import socket from 'socket.io-client';
 import { broadcast } from './javascript/broadcast';
 
 class App extends React.Component {
@@ -18,11 +17,11 @@ class App extends React.Component {
   broadcastervideo = React.createRef();
   config = window.config;
   DetectRTC = window.DetectRTC;
-  broadcastUI = broadcast(this.config);
+  broadcastUI = window.broadcastUI;
 
   componentDidMount(){
     // let openSocket = socket('https://zyro-one.herokuapp.com/');
-    console.log(window)
+    console.log(this.broadcastUI)
     
   }
 

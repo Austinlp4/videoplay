@@ -21,7 +21,7 @@
     <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
     <script src="https://www.webrtc-experiment.com/IceServersHandler.js"></script>
     <script src="https://www.webrtc-experiment.com/CodecsHandler.js"></script>
-    <script src="https://www.webrtc-experiment.com/RTCPeerConnection-v1.5.js"> </script>
+    <script src="https://www.webrtc-experiment.com/RTCPeerConnection-v1.5.js"></script>
     <script src="https://www.webrtc-experiment.com/webrtc-broadcasting/broadcast.js"> </script>
     <script src="https://www.webrtc-experiment.com/DetectRTC.js"></script>
     <!--
@@ -64,7 +64,6 @@
                         videosContainer.appendChild(htmlElement);
                     },
                     onRoomFound: function(room) {
-                        console.log('room', room)
                         var alreadyExist = document.querySelector('button[data-broadcaster="' + room.broadcaster + '"]');
                         if (alreadyExist) return;
                         if (typeof roomsList === 'undefined') roomsList = document.body;
@@ -93,6 +92,8 @@
                         console.log('now you can open or join rooms');
                     }
                 };
+
+                var broadcastUI = broadcast(config);
                 
             </script>
     <div id="root"></div>

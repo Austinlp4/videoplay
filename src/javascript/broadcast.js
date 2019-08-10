@@ -19,11 +19,11 @@ export var broadcast = function(config) {
     }
 
     function onDefaultSocketResponse(response) {
-        if (response.userToken == self.userToken) return;
+        if (response.userToken === self.userToken) return;
 
         if (isGetNewRoom && response.roomToken && response.broadcaster) config.onRoomFound(response);
 
-        if (response.userToken && response.joinUser == self.userToken && response.participant && channels.indexOf(response.userToken) == -1) {
+        if (response.userToken && response.joinUser === self.userToken && response.participant && channels.indexOf(response.userToken) === -1) {
             channels += response.userToken + '--';
             openSubSocket({
                 isofferer: true,
@@ -230,6 +230,7 @@ export var broadcast = function(config) {
             isbroadcaster = true;
             isGetNewRoom = false;
             startBroadcasting();
+            console.log('config', _config)
         },
         joinRoom: function(_config) {
             self.roomToken = _config.roomToken;
