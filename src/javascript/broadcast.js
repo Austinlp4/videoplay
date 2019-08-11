@@ -1,4 +1,4 @@
-export var broadcast = function(config) {
+export var broadcast = function(config, htmlElement) {
     var self = {
         userToken: uniqueToken()
     },
@@ -55,7 +55,7 @@ export var broadcast = function(config) {
         var socket = config.openSocket(socketConfig),
             isofferer = _config.isofferer,
             gotstream,
-            htmlElement = document.createElement(self.isAudio ? 'audio' : 'video'),
+            htmlElement,
             inner = { },
             peer;
 
