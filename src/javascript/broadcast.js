@@ -1,7 +1,7 @@
 export var broadcast = function(config, htmlElement) {
     var self = {
         userToken: uniqueToken()
-    },
+        },
         channels = '--',
         isbroadcaster,
         isGetNewRoom = true,
@@ -55,7 +55,7 @@ export var broadcast = function(config, htmlElement) {
         var socket = config.openSocket(socketConfig),
             isofferer = _config.isofferer,
             gotstream,
-            htmlElement,
+            // htmlElement,
             inner = { },
             peer;
 
@@ -80,26 +80,26 @@ export var broadcast = function(config, htmlElement) {
             onRemoteStream: function(stream) {
                 if (!stream) return;
 
-                try {
-                    htmlElement.setAttributeNode(document.createAttribute('autoplay'));
-                    htmlElement.setAttributeNode(document.createAttribute('playsinline'));
-                    htmlElement.setAttributeNode(document.createAttribute('controls'));
-                } catch (e) {
-                    htmlElement.setAttribute('autoplay', true);
-                    htmlElement.setAttribute('playsinline', true);
-                    htmlElement.setAttribute('controls', true);
-                }
+                // try {
+                //     htmlElement.setAttributeNode(document.createAttribute('autoplay'));
+                //     htmlElement.setAttributeNode(document.createAttribute('playsinline'));
+                //     htmlElement.setAttributeNode(document.createAttribute('controls'));
+                // } catch (e) {
+                //     htmlElement.setAttribute('autoplay', true);
+                //     htmlElement.setAttribute('playsinline', true);
+                //     htmlElement.setAttribute('controls', true);
+                // }
 
                 htmlElement.srcObject = stream;
 
                 _config.stream = stream;
-                if (self.isAudio) {
-                    htmlElement.addEventListener('play', function() {
-                        this.muted = false;
-                        this.volume = 1;
-                        afterRemoteStreamStartedFlowing();
-                    }, false);
-                } else onRemoteStreamStartsFlowing();
+                // if (self.isAudio) {
+                //     htmlElement.addEventListener('play', function() {
+                //         this.muted = false;
+                //         this.volume = 1;
+                //         afterRemoteStreamStartedFlowing();
+                //     }, false);
+                // } else onRemoteStreamStartsFlowing();
             }
         };
 
@@ -114,24 +114,24 @@ export var broadcast = function(config, htmlElement) {
             peer = RTCPeerConnection(peerConfig);
         }
 
-        function onRemoteStreamStartsFlowing() {
-            if(navigator.userAgent.match(/Android|iPhone|iPad|iPod|BlackBerry|IEMobile/i)) {
-                // if mobile device
-                return afterRemoteStreamStartedFlowing();
-            }
+        // function onRemoteStreamStartsFlowing() {
+        //     if(navigator.userAgent.match(/Android|iPhone|iPad|iPod|BlackBerry|IEMobile/i)) {
+        //         // if mobile device
+        //         return afterRemoteStreamStartedFlowing();
+        //     }
             
-            if (!(htmlElement.readyState <= HTMLMediaElement.HAVE_CURRENT_DATA || htmlElement.paused || htmlElement.currentTime <= 0)) {
-                afterRemoteStreamStartedFlowing();
-            } else setTimeout(onRemoteStreamStartsFlowing, 50);
-        }
+        //     if (!(htmlElement.readyState <= HTMLMediaElement.HAVE_CURRENT_DATA || htmlElement.paused || htmlElement.currentTime <= 0)) {
+        //         afterRemoteStreamStartedFlowing();
+        //     } else setTimeout(onRemoteStreamStartsFlowing, 50);
+        // }
 
-        function afterRemoteStreamStartedFlowing() {
-            gotstream = true;
-            config.onRemoteStream(htmlElement);
+        // function afterRemoteStreamStartedFlowing() {
+        //     gotstream = true;
+        //     config.onRemoteStream(htmlElement);
 
-            /* closing subsocket here on the offerer side */
-            if (_config.closeSocket) socket = null;
-        }
+        //     /* closing subsocket here on the offerer side */
+        //     if (_config.closeSocket) socket = null;
+        // }
 
         function sendsdp(sdp) {
             sdp = JSON.stringify(sdp);
@@ -163,7 +163,7 @@ export var broadcast = function(config, htmlElement) {
         }
 
         function socketResponse(response) {
-            if (response.userToken == self.userToken) return;
+            if (response.userToken === self.userToken) return;
             if (response.firstPart || response.secondPart || response.thirdPart) {
                 if (response.firstPart) {
                     inner.firstPart = response.firstPart;
@@ -220,7 +220,8 @@ export var broadcast = function(config, htmlElement) {
         return s4() + s4() + "-" + s4() + "-" + s4() + "-" + s4() + "-" + s4() + s4() + s4();
     }
 
-    openDefaultSocket(config.onReady || function() {});
+    openDefaultSocket(function() {});
+    // config.onReady || 
     return {
         createRoom: function(_config) {
             self.roomName = _config.roomName || 'Anonymous';

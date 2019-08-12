@@ -1,28 +1,26 @@
 import React from 'react';
 import './App.css';
 import ScreenShare from './components/ScreenShare';
+import Signin from './components/auth/Signin';
+import Register from './components/auth/Register';
 import socket from 'socket.io-client';
 import { Route, withRouter } from 'react-router-dom';
 
 class App extends React.Component {
-
   state = {
-    broadcastName: '',
-    option: 'Audio + Video',
-    video: null,
-    stream: null
+    
   }
-
 
   componentDidMount(){
     
   }
 
-
   render(){
   return (
     <div className="App">
-      <ScreenShare {...this.props}></ScreenShare>
+      <Route path='/register' render={props => <Register {...props}/>}></Route>
+      <Route path='/signin' render={props => <Signin {...props}/>}></Route>
+      <Route exact path='/' render={props => <ScreenShare {...props}/>} />
     </div>
   );
 }
