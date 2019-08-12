@@ -4,7 +4,7 @@ import ScreenShare from './components/ScreenShare';
 import Signin from './components/auth/Signin';
 import Register from './components/auth/Register';
 import socket from 'socket.io-client';
-import { Route, withRouter } from 'react-router-dom';
+import { Route, withRouter, HashRouter } from 'react-router-dom';
 
 class App extends React.Component {
   state = {
@@ -18,9 +18,11 @@ class App extends React.Component {
   render(){
   return (
     <div className="App">
-      <Route path='/register' render={props => <Register {...props}/>}></Route>
-      <Route path='/signin' render={props => <Signin {...props}/>}></Route>
-      <Route exact path='/' render={props => <ScreenShare {...props}/>} />
+      <HashRouter basename="/#">
+        <Route path='/register' render={props => <Register {...props}/>}></Route>
+        <Route path='/signin' render={props => <Signin {...props}/>}></Route>
+        <Route path='/:uid' render={props => <ScreenShare {...props}/>} />
+      </HashRouter>
     </div>
   );
 }

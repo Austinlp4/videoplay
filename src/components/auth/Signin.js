@@ -24,9 +24,9 @@ handleSubmit = (event) => {
 
  };
  render() {
-   const { authError } = this.props;
+   const { authError, auth } = this.props;
    const { email, password, error } = this.state;
-   if(this.props.auth.uid) return <Redirect to='/' />
+   if(this.props.auth.uid) return <Redirect to={`/${auth.uid}`} />
    return (
     <div>
      <div>

@@ -18,41 +18,41 @@ class ScreenShare extends React.Component{
     setupnewbroadcast = React.createRef();
     broadcastervideo = React.createRef();
     DetectRTC = window.DetectRTC;
+    config = window.config;
     broadcastUI = broadcast(this.config, this.broadcastervideo)
 
-    config = {
-      openSocket: function(config) {
-          var SIGNALING_SERVER = 'https://socketio-over-nodejs2.herokuapp.com:443/';
-          config.channel = config.channel || this.props.auth.uid;
-          var sender = Math.round(Math.random() * 999999999) + 999999999;
-          this.io.connect(SIGNALING_SERVER).emit('new-channel', {
-              channel: config.channel,
-              sender: sender
-          });
-          var socket = this.io.connect(SIGNALING_SERVER + config.channel);
-          socket.channel = config.channel;
-          socket.on('connect', function () {
-              if (config.callback) config.callback(socket);
-          });
-          socket.send = function (message) {
-              socket.emit('message', {
-                  sender: sender,
-                  data: message
-              });
-          };
-          socket.on('message', config.onmessage);
-      },
-      onNewParticipant: function(numberOfViewers) {
-          document.title = 'Viewers: ' + numberOfViewers;
-      },
-      onReady: function() {
-          console.log('now you can open or join rooms');
-      }
-  }
+  //   config = {
+  //     openSocket: function(config) {
+  //         var SIGNALING_SERVER = 'https://socketio-over-nodejs2.herokuapp.com:443/';
+  //         config.channel = config.channel || this.props.auth.uid;
+  //         var sender = Math.round(Math.random() * 999999999) + 999999999;
+  //         this.io.connect(SIGNALING_SERVER).emit('new-channel', {
+  //             channel: config.channel,
+  //             sender: sender
+  //         });
+  //         var socket = this.io.connect(SIGNALING_SERVER + config.channel);
+  //         socket.channel = config.channel;
+  //         socket.on('connect', function () {
+  //             if (config.callback) config.callback(socket);
+  //         });
+  //         socket.send = function (message) {
+  //             socket.emit('message', {
+  //                 sender: sender,
+  //                 data: message
+  //             });
+  //         };
+  //         socket.on('message', config.onmessage);
+  //     },
+  //     onNewParticipant: function(numberOfViewers) {
+  //         document.title = 'Viewers: ' + numberOfViewers;
+  //     },
+  //     onReady: function() {
+  //         console.log('now you can open or join rooms');
+  //     }
+  // }
 
     componentDidMount(){
         console.log(this.props.auth)
-        console.log('config', this.config)
     }
 
     captureUserMedia = (callback) => {
@@ -167,7 +167,7 @@ class ScreenShare extends React.Component{
       }
 
       onSuccessWithSrcObject = (stream) => {
-        let uid = this.props.auth
+        let uid = this.props.auth.uid
         this.broadcastervideo.srcObject = stream
         this.props.addBroadcaster(uid);
       }

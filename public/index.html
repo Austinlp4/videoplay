@@ -37,11 +37,12 @@
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <!-- <script>
+    <script>
               var config = {
                     openSocket: function(config) {
                         var SIGNALING_SERVER = 'https://socketio-over-nodejs2.herokuapp.com:443/';
-                        config.channel = config.channel || location.href.replace(/\/|:|#|%|\.|\[|\]/g, '');
+                        config.channel = config.channel || location.hash.substr(1);
+                        console.log('channel', config.channel);
                         var sender = Math.round(Math.random() * 999999999) + 999999999;
                         io.connect(SIGNALING_SERVER).emit('new-channel', {
                             channel: config.channel,
@@ -67,8 +68,8 @@
                         console.log('now you can open or join rooms');
                     }
                 }
-              
-            </script> -->
+              console.log('location', location.hash.substr(1));
+            </script>
     <div id="root"></div>
     <!--
       This HTML file is a template.
