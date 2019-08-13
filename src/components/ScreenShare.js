@@ -29,6 +29,9 @@ class ScreenShare extends React.Component{
             joinUser: this.props.location.pathname
           })
         }
+        this.setState({
+          video: true
+        })
     }
 
     captureUserMedia = (callback) => {
