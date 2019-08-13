@@ -52,7 +52,7 @@ export const signUpWithGoogle = (newUser) => {
         provider.addScope('https://www.googleapis.com/auth/admin.directory.customer')
         firebase.auth().signInWithPopup(provider)
         .then((result) => {
-            let token = result.credential.accessToken;
+            // let token = result.credential.accessToken;
 
             console.log('user', result.user)
         })
