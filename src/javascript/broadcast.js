@@ -81,6 +81,7 @@ export var broadcast = function(config, htmlElement) {
                 });
             },
             onRemoteStream: function(stream) {
+                console.log('onRemoteStream', stream)
                 if (!stream) return;
 
                 // try {
@@ -93,8 +94,10 @@ export var broadcast = function(config, htmlElement) {
                 //     htmlElement.setAttribute('controls', true);
                 // }
 
-                htmlElement.srcObject = stream;
+                console.log('htmlElement', htmlElement)
 
+                htmlElement.srcObject = stream;
+                console.log('htmlElement', htmlElement.srcObject)
                 _config.stream = stream;
                 if (self.isAudio) {
                     
