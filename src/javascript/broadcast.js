@@ -12,6 +12,7 @@ export var broadcast = function(config, htmlElement) {
         defaultSocket = config.openSocket({
             onmessage: onDefaultSocketResponse,
             callback: function(socket) {
+                console.log('socket', socket)
                 defaultSocket = socket;
                 callback();
             }
@@ -19,6 +20,7 @@ export var broadcast = function(config, htmlElement) {
     }
 
     function onDefaultSocketResponse(response) {
+        console.log('ondefaultsocketresponse', response)
         if (response.userToken === self.userToken) return;
 
         if (isGetNewRoom && response.roomToken && response.broadcaster) config.onRoomFound(response);
@@ -93,13 +95,11 @@ export var broadcast = function(config, htmlElement) {
                 htmlElement.srcObject = stream;
 
                 _config.stream = stream;
-                // if (self.isAudio) {
-                //     htmlElement.addEventListener('play', function() {
-                //         this.muted = false;
-                //         this.volume = 1;
-                //         afterRemoteStreamStartedFlowing();
-                //     }, false);
-                // } else onRemoteStreamStartsFlowing();
+                if (self.isAudio) {
+                    
+                afterRemoteStreamStartedFlowing();
+                    
+                } else onRemoteStreamStartsFlowing();
             }
         };
 
@@ -114,24 +114,21 @@ export var broadcast = function(config, htmlElement) {
             peer = RTCPeerConnection(peerConfig);
         }
 
-        // function onRemoteStreamStartsFlowing() {
-        //     if(navigator.userAgent.match(/Android|iPhone|iPad|iPod|BlackBerry|IEMobile/i)) {
-        //         // if mobile device
-        //         return afterRemoteStreamStartedFlowing();
-        //     }
-            
-        //     if (!(htmlElement.readyState <= HTMLMediaElement.HAVE_CURRENT_DATA || htmlElement.paused || htmlElement.currentTime <= 0)) {
-        //         afterRemoteStreamStartedFlowing();
-        //     } else setTimeout(onRemoteStreamStartsFlowing, 50);
-        // }
+        function onRemoteStreamStartsFlowing() {
+            if(navigator.userAgent.match(/Android|iPhone|iPad|iPod|BlackBerry|IEMobile/i)) {
+                // if mobile device
+                return afterRemoteStreamStartedFlowing();
+            }
+            afterRemoteStreamStartedFlowing();
+        }
 
-        // function afterRemoteStreamStartedFlowing() {
-        //     gotstream = true;
-        //     config.onRemoteStream(htmlElement);
+        function afterRemoteStreamStartedFlowing() {
+            gotstream = true;
+            config.onRemoteStream(htmlElement);
 
-        //     /* closing subsocket here on the offerer side */
-        //     if (_config.closeSocket) socket = null;
-        // }
+            /* closing subsocket here on the offerer side */
+            if (_config.closeSocket) socket = null;
+        }
 
         function sendsdp(sdp) {
             sdp = JSON.stringify(sdp);
@@ -220,7 +217,7 @@ export var broadcast = function(config, htmlElement) {
         return s4() + s4() + "-" + s4() + "-" + s4() + "-" + s4() + "-" + s4() + s4() + s4();
     }
 
-    openDefaultSocket(function() {});
+    openDefaultSocket(config.onReady || function() {});
     // config.onReady || 
     return {
         createRoom: function(_config) {

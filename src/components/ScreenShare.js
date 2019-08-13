@@ -12,7 +12,7 @@ class ScreenShare extends React.Component{
         stream: null
     }
 
-    io = window.io;
+    socket = window.socket;
     videocontainer = React.createRef();
     broadcastname = React.createRef();
     setupnewbroadcast = React.createRef();
@@ -22,7 +22,7 @@ class ScreenShare extends React.Component{
     broadcastUI = broadcast(this.config, this.broadcastervideo)
 
     componentDidMount(){
-        console.log('location', this.props.location)
+        console.log('config.channel', broadcast(this.config, this.broadcastervideo))
         if(`/${this.props.auth.uid}` !== this.props.location.pathname ){
           this.broadcastUI.joinRoom({
             roomToken: this.props.location.pathname,
