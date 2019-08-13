@@ -1,4 +1,4 @@
-export var broadcast = function(config, htmlElement) {
+export var broadcast = function(config, htmlElement, onRoomFound) {
     var self = {
         userToken: uniqueToken()
         },
@@ -23,7 +23,7 @@ export var broadcast = function(config, htmlElement) {
         console.log('ondefaultsocketresponse', response)
         if (response.userToken === self.userToken) return;
 
-        if (isGetNewRoom && response.roomToken && response.broadcaster) config.onRoomFound(response);
+        if (isGetNewRoom && response.roomToken && response.broadcaster) onRoomFound(response);
 
         if (response.userToken && response.joinUser === self.userToken && response.participant && channels.indexOf(response.userToken) === -1) {
             channels += response.userToken + '--';
@@ -128,7 +128,7 @@ export var broadcast = function(config, htmlElement) {
 
         function afterRemoteStreamStartedFlowing() {
             gotstream = true;
-            config.onRemoteStream(htmlElement);
+            // config.onRemoteStream(htmlElement);
 
             /* closing subsocket here on the offerer side */
             if (_config.closeSocket) socket = null;

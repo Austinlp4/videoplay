@@ -3,11 +3,10 @@ import { broadcast } from '../javascript/broadcast';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { addBroadcaster } from '../store/actions/broadcastActions';
+import Broadcast from './Broadcast';
 
 class ScreenShare extends React.Component{
     state = {
-        broadcastName: '',
-        option: 'Audio + Video',
         video: null,
         stream: null
     }
@@ -19,10 +18,11 @@ class ScreenShare extends React.Component{
     broadcastervideo = React.createRef();
     DetectRTC = window.DetectRTC;
     config = window.config;
-    broadcastUI = broadcast(this.config, this.broadcastervideo)
+    broadcastUI = broadcast(this.config, this.broadcastervideo, this.onRoomFound)
 
     componentDidMount(){
         console.log('config.channel', broadcast(this.config, this.broadcastervideo))
+        console.log('pathname', `/${this.props.auth.uid}`, this.props.location.pathname)
         if(`/${this.props.auth.uid}` !== this.props.location.pathname ){
           this.broadcastUI.joinRoom({
             roomToken: this.props.location.pathname,
@@ -34,40 +34,20 @@ class ScreenShare extends React.Component{
         })
     }
 
+    onRoomFound = (room) => {
+      this.broadcastUI.joinRoom({
+        roomToken: room.broadcaster,
+        joinUser: room.broadcaster
+      })
+    }
+
     captureUserMedia = (callback) => {
         let constraints = null;
         window.option = this.state.option;
         let option = window.option;
     
-        if (option === 'Only Audio') {
-          constraints = {
-              audio: true,
-              video: false
-          };
           if(this.DetectRTC.hasMicrophone !== true) {
               alert('DetectRTC library is unable to find microphone; maybe you denied microphone access once and it is still denied or maybe microphone device is not attached to your system or another app is using same microphone.');
-          }
-          }
-          if (option === 'Screen') {
-              constraints = {
-                  audio: false,
-                  video: {
-                    mandatory: {
-                      chromeMediaSource: 'desktop',
-                      maxWidth: 1920,
-                      maxHeight: 1080,
-                      maxFrameRate: 10,
-                      minAspectRatio: 1.77,
-                      // chromeMediaSourceId: sourceId         
-                    }
-                }
-              };
-              if(this.DetectRTC.isScreenCapturingSupported !== true) {
-                alert('DetectRTC library is unable to find screen capturing support. You MUST run chrome with command line flag "chrome --enable-usermedia-screen-capturing"');
-              }
-          }
-          if (option !== 'Only Audio' && option !== 'Screen' && this.DetectRTC.hasWebcam !== true) {
-              alert('DetectRTC library is unable to find webcam; maybe you denied webcam access once and it is still denied or maybe webcam device is not attached to your system or another app is using same webcam.');
           }
     
           this.setState({
@@ -112,40 +92,29 @@ class ScreenShare extends React.Component{
     
       }
 
-      handleChange = event => {
-        this.setState({
-          [event.target.name]: event.target.value
-        })
-      }
+      // handleChange = event => {
+      //   this.setState({
+      //     [event.target.name]: event.target.value
+      //   })
+      // }
     
       setupNewBroadcastButtonClickHandler = () => {
         this.DetectRTC.load(() => {
           this.captureUserMedia(() => {
-            let shared = 'video';
-            if(window.option === 'Only Audio') {
-              shared = 'audio';
-            }
-            if(window.option === 'screen'){
-              shared = 'screen'
-            }
-    
-            let roomName;
-    
-            if(this.state.broadcastName === ''){
-              roomName = 'Anonymous';
-            } else {
-              roomName = this.state.broadcastName;
-            }
-    
-            this.broadcastUI.createRoom({
-              roomName: roomName,
-              isAudio: shared === 'audio'
-            })
+            // let shared = 'video';
+            // let roomName = this.props.username;
+            // // this.broadcastUI.createRoom({
+            // //   roomName: roomName,
+            // //   isAudio: shared === 'audio'
+            // // })
           })
         })
       }
 
       onSuccessWithSrcObject = (stream) => {
+        this.setState({
+          stream: stream
+        })
         let uid = this.props.auth.uid
         this.broadcastervideo.srcObject = stream
         this.props.addBroadcaster(uid);
@@ -156,19 +125,6 @@ class ScreenShare extends React.Component{
             <div>
                 <section className="experiment">
         <section>
-          <select id="broadcasting-option" name='option' value={this.state.option} onChange={this.handleChange}>
-            <option value="Audio + Video">Audio + Video</option>
-            <option value="Only Audio">Only Audio</option>
-            <option value="Screen">Screen</option>
-          </select>
-          <input 
-            type="text" 
-            id="broadcast-name"
-            ref={this.broadcastname}
-            name='broadcastName'
-            onChange={this.handleChange}
-            value={this.state.broadcastName}
-            />
           <button 
             id="setup-new-broadcast" 
             className="setup"
@@ -183,6 +139,7 @@ class ScreenShare extends React.Component{
             >
               {this.state.video ? <video id="peerVideo" ref={el => this.broadcastervideo = el} autoPlay/> : null}
             </div>
+            <Broadcast stream={this.state.stream}/>
         </section>
       </section>
             </div>
@@ -191,9 +148,11 @@ class ScreenShare extends React.Component{
 }
 
 const mapStateToProps = (state) => {
+  console.log('state', state)
   return {
     authError: state.auth.authError,
-    auth: state.firebase.auth
+    auth: state.firebase.auth,
+    username: state.firebase.profile.username
   }
 }
 
