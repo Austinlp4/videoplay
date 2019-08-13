@@ -7,7 +7,7 @@ export var broadcast = function(config, htmlElement) {
         isGetNewRoom = true,
         participants = 1,
         defaultSocket = { };
-
+        console.log(self.userToken)
     function openDefaultSocket(callback) {
         defaultSocket = config.openSocket({
             onmessage: onDefaultSocketResponse,
@@ -36,6 +36,7 @@ export var broadcast = function(config, htmlElement) {
     }
 
     function openSubSocket(_config) {
+        console.log('_config.channel', _config.channel)
         if (!_config.channel) return;
         var socketConfig = {
             channel: _config.channel,

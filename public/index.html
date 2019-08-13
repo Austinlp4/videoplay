@@ -50,6 +50,7 @@
                         });
                         var socket = io.connect(SIGNALING_SERVER + config.channel);
                         socket.channel = config.channel;
+                        console.log('socket.channel', socket.channel);
                         socket.on('connect', function () {
                             if (config.callback) config.callback(socket);
                         });
